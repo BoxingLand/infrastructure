@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-app
+  labels:
+    name: gateway-app
+    app: gateway-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-api
+  template:
+    metadata:
+      labels:
+        app: gateway-api
+    spec:
+      containers:
+      - name: gateway-api
+        image: emurashin/gateway:latest
+        imagePullPolicy: Always
+        ports:
+          - name: gateway-service
+            containerPort: 8000
+        env:
+          - name: API_TITLE
+            valueFrom:
+              secretKeyRef:
+                name: gateway-app-urls
+                key: API_TITLE
+          - name: CORS_ORIGINS
+            valueFrom:
+              secretKeyRef:
+                name: gateway-app-urls
+                key: CORS_ORIGINS
+          - name: APP_PORT
+            valueFrom:
+              secretKeyRef:
+                name: gateway-app-urls
+                key: APP_PORT
+          - name: USER_SERVICE_URL
+            valueFrom:
+              secretKeyRef:
+                name: gateway-app-urls
+                key: USER_SERVICE_URL
+          - name: AUTH_SERVICE_URL
+            valueFrom:
+              secretKeyRef:
+                name: gateway-app-urls
+                key: AUTH_SERVICE_URL

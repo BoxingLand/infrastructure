@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-app
+  labels:
+    name: auth-app
+    app: auth-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-grpc
+  template:
+    metadata:
+      labels:
+        app: auth-grpc
+    spec:
+      containers:
+      - name: auth-grpc
+        image: emurashin/auth-service:latest
+        imagePullPolicy: Always
+        ports:
+          - name: auth-service
+            containerPort: 50052
+        env:
+          - name: DATABASE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: database_host
+          - name: DATABASE_USER
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: database_user
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: database_password
+          - name: DATABASE_NAME
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: database_name
+          - name: DB_POOL_SIZE
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: db_pool_size
+          - name: SERVER_PORT
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: server_port
+          - name: ACCESS_TOKEN_EXPIRE_MINUTES
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: access_token_expire_minutes
+          - name: REFRESH_TOKEN_EXPIRE_MINUTES
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: refresh_token_expire_minutes
+          - name: JWT_ALGORITHM
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: jwt_algorithm
+          - name: ENCRYPT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: encrypt_key
+          - name: MAIL_FROM
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: mail_from
+          - name: MAIL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: mail_password
+          - name: MAIL_PORT
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: mail_port
+          - name: MAIL_SERVER
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: mail_server
