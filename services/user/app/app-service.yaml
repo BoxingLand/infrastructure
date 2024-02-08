@@ -10,3 +10,18 @@ spec:
   ports:
     - port: 50051
       targetPort: user-service
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-monitoring
+  labels:
+    name: user-monitoring
+spec:
+  selector:
+    app: user-grpc
+  ports:
+    - port: 4321
+      targetPort: user-monitoring

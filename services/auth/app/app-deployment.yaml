@@ -22,6 +22,8 @@ spec:
         ports:
           - name: auth-service
             containerPort: 50052
+          - name: auth-monitoring
+            containerPort: 4322
         env:
           - name: DATABASE_HOST
             valueFrom:
@@ -53,6 +55,11 @@ spec:
               secretKeyRef:
                 name: auth-app-urls
                 key: server_port
+          - name: METRICS_PORT
+            valueFrom:
+              secretKeyRef:
+                name: auth-app-urls
+                key: METRICS_PORT
           - name: ACCESS_TOKEN_EXPIRE_MINUTES
             valueFrom:
               secretKeyRef:

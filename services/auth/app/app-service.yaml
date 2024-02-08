@@ -10,3 +10,18 @@ spec:
   ports:
     - port: 50052
       targetPort: auth-service
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-monitoring
+  labels:
+    name: auth-monitoring
+spec:
+  selector:
+    app: auth-grpc
+  ports:
+    - port: 4322
+      targetPort: auth-monitoring

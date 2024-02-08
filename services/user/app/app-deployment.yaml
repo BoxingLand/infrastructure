@@ -22,6 +22,8 @@ spec:
         ports:
           - name: user-service
             containerPort: 50051
+          - name: user-monitoring
+            containerPort: 4321
         env:
           - name: DATABASE_HOST
             valueFrom:
@@ -53,6 +55,11 @@ spec:
               secretKeyRef:
                 name: user-app-urls
                 key: SERVER_PORT
+          - name: METRICS_PORT
+            valueFrom:
+              secretKeyRef:
+                name: user-app-urls
+                key: METRICS_PORT
           - name: MINIO_ROOT_USER
             valueFrom:
               secretKeyRef:

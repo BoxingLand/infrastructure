@@ -1,10 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prometheus-deployment
-  namespace: monitoring
-  labels:
-    app: prometheus-server
+  name: prometheus-server
+#  namespace: monitoring
 spec:
   replicas: 1
   selector:
@@ -18,29 +16,14 @@ spec:
       containers:
         - name: prometheus
           image: prom/prometheus
-          args:
-            - "--storage.tsdb.retention.time=12h"
-            - "--config.file=/etc/prometheus/prometheus.yml"
-            - "--storage.tsdb.path=/prometheus/"
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090
-          resources:
-            requests:
-              cpu: 500m
-              memory: 500M
-            limits:
-              cpu: "1"
-              memory: 1Gi
           volumeMounts:
-            - name: prometheus-config-volume
-              mountPath: /etc/prometheus/
-            - name: prometheus-storage-volume
-              mountPath: /prometheus/
+            - name: config-volume
+              mountPath: /etc/prometheus
       volumes:
-        - name: prometheus-config-volume
+        - name: config-volume
           configMap:
-            defaultMode: 420
             name: prometheus-server-conf
-
-        - name: prometheus-storage-volume
-          emptyDir: {}
+            defaultMode: 420

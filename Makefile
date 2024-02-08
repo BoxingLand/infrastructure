@@ -64,8 +64,33 @@ deploy_gateway:
 	kubectl create -f ./services/gateway/app/app-service.yaml
 	echo ""
 
+deploy_monitoring:
+	echo "Creating monitoring prometheus config map..."
+	kubectl create -f ./monitoring/prometheus/prometheus-config.yaml
+	echo ""
 
-deploy_all: deploy_minio deploy_user deploy_auth deploy_gateway
+	echo "Creating monitoring prometheus deployment..."
+	kubectl create -f ./monitoring/prometheus/prometheus-deployment.yaml
+	echo ""
+
+	echo "Creating monitoring prometheus service..."
+	kubectl create -f ./monitoring/prometheus/prometheus-service.yaml
+	echo ""
+
+	echo "Creating monitoring grafana pvc..."
+	kubectl create -f ./monitoring/grafana/grafana-pvc.yaml
+	echo ""
+
+	echo "Creating monitoring grafana deployment..."
+	kubectl create -f ./monitoring/grafana/grafana-deployment.yaml
+	echo ""
+
+	echo "Creating monitoring grafana service..."
+	kubectl create -f ./monitoring/grafana/grafana-service.yaml
+	echo ""
+
+
+deploy_all:  deploy_minio deploy_user deploy_auth deploy_gateway deploy_monitoring
 
 
 delete_minio:
